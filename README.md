@@ -45,6 +45,8 @@ source("EI.R")
 plot(.xx,EI(.xx,kmi),col='blue',type='l',xlab="x",ylab="EI(x)")
 ```
 
+![](EI.png)
+
 
 Expected Conditional Improvement (ECI) by Monte Carlo estimation (! slow !)
 
@@ -118,9 +120,11 @@ text(labels="ECI(xn,x) = E[ EI(x) | yn~Y(xn)] (x50)",x=.3,y=0.045,col='red')
 
 And finally, Integrated Expected Conditional Improvement (IECI) calculated at the point xn: 
 
-```{r}
-IECI_mc(xn,kmi)
-IECI(xn,kmi)
+```
+> IECI_mc(xn,kmi)
+[1] 0.002014966
+> IECI(xn,kmi)
+[1] 0.002115793
 ```
 
 
@@ -129,19 +133,19 @@ Overall criterions values (EI and IECI):
 ```{r}
 par(mfrow=c(1,1))
 
-sectionview.km(kmi,ylim=c(0,1));
+sectionview.km(kmi,ylim=c(-1,0))
 abline(v=X,lty=2)
 
-n=function(x){(x-min(x))/(max(x)-min(x))}
+n=function(x){(x-min(x))/(max(x)-min(x))-1}
 
 xx=seq(f=0,t=1,l=1000)
 lines(xx,(fun(xx)),type='l')
 
 lines(xx,n(IECI(x0 = xx,model = kmi,lower=0,upper=1)),type='l',col='blue')
-text(labels="IECI(x)",x=0.6,y=0.9,col='blue')
+text(labels="IECI(x)",x=0.6,y=0.9-1,col='blue')
 
-lines(xx,n(EI(xx,model=kmi)),col='red');
-text(labels="EI(x)",x=0.6,y=0.1,col='red')
+lines(xx,n(EI(xx,model=kmi)),col='red')
+text(labels="EI(x)",x=0.6,y=0.1-1,col='red')
 ```
 
 ![](IECI_vs_EI.png)
