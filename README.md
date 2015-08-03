@@ -157,19 +157,8 @@ Overall criterions values (EI and IECI):
 par(mfrow=c(1,1))
 
 sectionview.km(kmi,ylim=c(-1,0))
-```
+abline(v=X$X,lty=2)
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
-
-```r
-abline(v=X,lty=2)
-```
-
-```
-## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): l'objet (list) ne peut être converti automatiquement en un type 'double'
-```
-
-```r
 n=function(x){(x-min(x))/(max(x)-min(x))-1}
 
 xx=seq(f=0,t=1,l=1000)
@@ -210,126 +199,128 @@ lines(xx,n(EI(xx,model=kmi)),col='red')
 text(labels="EI(x)",x=0.6,y=0.1-1,col='red')
 ```
 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+
 
 
 ## Analytical development of IECI:
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_01.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_01.png" height="30">
 
 
 ### Computable form of ECI
 
 ECI is viewed in two main parts : updated realizations where the new conditional point 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_37.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_37.png" height="30">
  is below current minimum 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_38.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_38.png" height="30">
 , and updated realizations where the new conditional point 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_39.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_39.png" height="30">
  is over current minimum 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_40.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_40.png" height="30">
  (which then does not change this current minimum for EI calculation):
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_02.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_02.png" height="30">
 
 
 * 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_41.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_41.png" height="30">
  part: 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_03.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_03.png" height="30">
  
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_04.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_04.png" height="30">
 
 Change variable: 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_42.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_42.png" height="30">
 
   -  
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_43.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_43.png" height="30">
 
   -  
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_44.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_44.png" height="30">
 
   -  
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_45.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_45.png" height="30">
 
   
 So,
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_05.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_05.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_06.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_06.png" height="30">
 
 Considering that ([@KrigingUpdate]),
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_07.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_07.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_08.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_08.png" height="30">
 
 
 Finally, 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_09.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_09.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_10.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_10.png" height="30">
 
 Given,
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_11.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_11.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_12.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_12.png" height="30">
 
 
 
 
 
 * 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_46.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_46.png" height="30">
  part: 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_13.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_13.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_14.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_14.png" height="30">
 
 Change variable: 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_47.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_47.png" height="30">
 
   -  
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_48.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_48.png" height="30">
 
   -  
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_49.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_49.png" height="30">
 
   -  
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_50.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_50.png" height="30">
 
 
 So,
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_15.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_15.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_16.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_16.png" height="30">
 
 
 Finally, 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_17.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_17.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_18.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_18.png" height="30">
 
 Given,
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_19.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_19.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_20.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_20.png" height="30">
 
 
 
@@ -337,92 +328,92 @@ Given,
 These integrals need the following expressions to become tractable:
 
 * 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_51.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_51.png" height="30">
 
 * 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_52.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_52.png" height="30">
 
 
 We have (see below):
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_21.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_21.png" height="30">
 
 
 And
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_22.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_22.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_23.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_23.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_24.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_24.png" height="30">
 
 
 It should be noticed that this exact calculation of ECI is vectorizable, which means that synchronized computations may be performed in an efficient manner.
 
 
 ### Detailed calculation of integrals in 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_53.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_53.png" height="30">
  and 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_54.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_54.png" height="30">
 
 
 #### 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_55.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_55.png" height="30">
 
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_25.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_25.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_26.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_26.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_27.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_27.png" height="30">
 
 
 
 #### 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_56.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_56.png" height="30">
 
 
 
 Changing variable: 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_57.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_57.png" height="30">
 ,
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_28.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_28.png" height="30">
 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_29.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_29.png" height="30">
 
 
    * Then, 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_30.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_30.png" height="30">
 
     
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_31.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_31.png" height="30">
 
    * And, 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_32.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_32.png" height="30">
 
   We use the bi-normal cumulative density approximation [@Genz1992]: 
   
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_33.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_33.png" height="30">
 
   Changing variable 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_58.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_58.png" height="30">
 , 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_34.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_34.png" height="30">
 
 and thus, 
 
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_35.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_35.png" height="30">
  
-<img src="https://rawgit.com/IRSN/IECI/master/eq_no_36.png" alt="Equation Fail">
+<img src="https://rawgit.com/IRSN/IECI/master//figure/eq_no_36.png" height="30">
 
 
 

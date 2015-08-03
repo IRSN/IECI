@@ -124,7 +124,7 @@ Overall criterions values (EI and IECI):
 par(mfrow=c(1,1))
 
 sectionview.km(kmi,ylim=c(-1,0))
-abline(v=X,lty=2)
+abline(v=X$X,lty=2)
 
 n=function(x){(x-min(x))/(max(x)-min(x))-1}
 
