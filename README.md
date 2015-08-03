@@ -1,38 +1,44 @@
----
-title: "Integrated Expected Conditional Improvement"
-author: "Y. Richet"
-date: '2015'
-output: html_document
-organization: Insitute for Radiation protection and Nuclear Safety (IRSN)
-address: 31 avenue de la division Leclerc, Fontenay aux Roses, France."
----
+# Integrated Expected Conditional Improvement
 
 These R files contains an analytical implementation of the criterion "IECI" proposed for Optimization under unknown constraints (2010) by [Robert Gramacy and Herbert Lee](http://arxiv.org/pdf/1004.4027v2.pdf). 
 
 This implementation is based on [DiceKriging](https://cran.r-project.org/web/packages/DiceKriging/index.html) R package.
 
-# R usage
+## R usage
 
 Objective function
 
-```{r}
+
+```r
 fun=function(x){-(1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7))}
 
 plot(fun,type='l',ylim=c(-1.2,0.2),ylab="y")
+```
 
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png) 
+
+```r
 X=data.frame(X=matrix(c(.0,.33,.737,1),ncol=1))
 y=fun(X)
 ```
 
 Expected Improvement (EI)
 
-```{r}
+
+```r
 par(mfrow=c(2,1))
 
 library(DiceKriging)
 set.seed(123)
 kmi <- km(design=X,response=y,control=list(trace=FALSE),optim.method = 'gen')
+```
 
+```
+## Warning in (function (fn, nvars, max = FALSE, pop.size = 1000,
+## max.generations = 100, : NAs introduits lors de la conversion automatique
+```
+
+```r
 library(DiceView)
 sectionview.km(kmi,col_surf='blue',col_points='blue',xlim=c(0,1),ylim=c(-1.1,0),title = "",Xname = "x",yname="Y(x)")
 plot(fun,type='l',add=T)
@@ -45,12 +51,12 @@ source("EI.R")
 plot(.xx,EI(.xx,kmi),col='blue',type='l',xlab="x",ylab="EI(x)")
 ```
 
-![](EI.png)
-
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 Expected Conditional Improvement (ECI) by Monte Carlo estimation (! slow !)
 
-```{r}
+
+```r
 par(mfrow=c(2,1))
 
 xn=0.4
@@ -90,10 +96,13 @@ lines(.xx,Vectorize(function(.x)5*ECI_mc_vec.o2(.x,xn,kmi))(.xx),col='red',type=
 text(labels="ECI(xn,x) = E[ EI(x) | yn~Y(xn)] (x50)",x=.3,y=0.045,col='red')
 ```
 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+
 
 Expected Conditional Improvement (ECI) by exact calculation (! fast !)
 
-```{r}
+
+```r
 par(mfrow=c(2,1))
 
 sectionview.km(kmi,col_surf='blue',col_points='blue',xlim=c(xn-0.2,xn+0.2),ylim=c(-1.1,-.7),title = "",Xname = "x")
@@ -114,8 +123,21 @@ text(labels="EI(x)",x=.4,y=0.03,col='blue')
 
 source("IECI.R",echo = FALSE)
 lines(.xx,5*ECI(matrix(.xx,ncol=1),xn,kmi),col='red',type='l')
+```
+
+```
+## Warning in ECI(matrix(.xx, ncol = 1), xn, kmi): skipping x[]: 201
+```
+
+```
+## Warning in ECI(matrix(.xx, ncol = 1), xn, kmi): Some x match x0
+```
+
+```r
 text(labels="ECI(xn,x) = E[ EI(x) | yn~Y(xn)] (x50)",x=.3,y=0.045,col='red')
 ```
+
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 
 
 And finally, Integrated Expected Conditional Improvement (IECI) calculated at the point xn: 
@@ -130,124 +152,278 @@ And finally, Integrated Expected Conditional Improvement (IECI) calculated at th
 
 Overall criterions values (EI and IECI):
 
-```{r}
+
+```r
 par(mfrow=c(1,1))
 
 sectionview.km(kmi,ylim=c(-1,0))
-abline(v=X,lty=2)
+```
 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+
+```r
+abline(v=X,lty=2)
+```
+
+```
+## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): l'objet (list) ne peut être converti automatiquement en un type 'double'
+```
+
+```r
 n=function(x){(x-min(x))/(max(x)-min(x))-1}
 
 xx=seq(f=0,t=1,l=1000)
 lines(xx,(fun(xx)),type='l')
 
 lines(xx,n(IECI(x0 = xx,model = kmi,lower=0,upper=1)),type='l',col='blue')
+```
+
+```
+## Warning in ECI(x = integration.points, x0 = x0, model = model, precalc.data
+## = precalc.data, : 100
+```
+
+```
+## Warning in ECI(x = integration.points, x0 = x0, model = model, precalc.data
+## = precalc.data, : 100
+```
+
+```
+## Warning in ECI(x = integration.points, x0 = x0, model = model, precalc.data
+## = precalc.data, : 1,1000
+```
+
+```
+## Warning in ECI(x = integration.points, x0 = x0, model = model, precalc.data
+## = precalc.data, : 100 2
+```
+
+```
+## Warning in ECI(x = integration.points, x0 = x0, model = model, precalc.data
+## = precalc.data, : 0,2
+```
+
+```r
 text(labels="IECI(x)",x=0.6,y=0.9-1,col='blue')
 
 lines(xx,n(EI(xx,model=kmi)),col='red')
 text(labels="EI(x)",x=0.6,y=0.1-1,col='red')
 ```
 
-![](IECI_vs_EI.png)
 
 
+## Analytical development of IECI:
 
-# Analytical development of IECI:
 
-$$IECI(x_n) := \int_{x \in D} \int_{y_n \sim \mathcal{N}(\mu_Y,\sigma_Y)} EI(x | Y(x_n)=y_n) dy_n = \int_{x \in D} ECI(x_n,x) dx$$
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_01.png" alt="Equation Fail">
 
-## Computable form of ECI
 
-ECI is viewed in two main parts : updated realizations where the new conditional point $y_n$ is below current minimum $m$, and updated realizations where the new conditional point $y_n$ is over current minimum $m$ (which then does not change this current minimum for EI calculation):
+### Computable form of ECI
 
-$$ECI(x,x_n) = \int_{-\infty}^m EI_{n}^{y_n}(x | Y_n(x_n)=y_n) d\phi_{\mu,\sigma}{y_n} + \int_m^{+\infty} EI_n^{m}(x | Y_n(x_n)=y_n) d\phi_{\mu,\sigma}{y_n}$$
+ECI is viewed in two main parts : updated realizations where the new conditional point 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_37.png" alt="Equation Fail">
+ is below current minimum 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_38.png" alt="Equation Fail">
+, and updated realizations where the new conditional point 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_39.png" alt="Equation Fail">
+ is over current minimum 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_40.png" alt="Equation Fail">
+ (which then does not change this current minimum for EI calculation):
 
-* $y_n>m$ part: 
-$$ECI_n^m(x,x_n) := \int_m^{+\infty} EI_n^{m}(x | Y_n(x_n)=y_n) d\phi_{\mu,\sigma}{y_n}$$ 
-$$ = \int_m^{+\infty} \left( (m-\mu_n(x)) \Phi \left( \frac{m-\mu_n(x)}{\sigma_n(x)} \right) + \sigma_n(x) \phi \left( \frac{m-\mu_n(x)}{\sigma_n(x)} \right) \right) \frac{e^{-\frac{(y_n-\mu(x_n))^2}{2 \sigma^2(x_n)}}}{\sqrt{2 \pi} \sigma(x_n)} dy_n$$
-Change variable: $z := \frac {y_n-\mu(x_n)}{\sigma(x_n)}$
-  -  $y_n=\sigma(x_n) z + \mu(x_n)$
-  -  $dz = dy_n/\sigma(x_n)$
-  -  $y_n \in [m,+\infty[ \sim z \in [m' = (m-\mu(x_n))/\sigma(x_n), + \infty[$
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_02.png" alt="Equation Fail">
+
+
+* 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_41.png" alt="Equation Fail">
+ part: 
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_03.png" alt="Equation Fail">
+ 
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_04.png" alt="Equation Fail">
+
+Change variable: 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_42.png" alt="Equation Fail">
+
+  -  
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_43.png" alt="Equation Fail">
+
+  -  
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_44.png" alt="Equation Fail">
+
+  -  
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_45.png" alt="Equation Fail">
+
   
 So,
-$$\frac{m-\mu_n(x)}{\sigma_n(x)} = \frac{m-\mu(x)-\lambda_n^t(x) (y_n-\mu(x_n))} {\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}}$$
-$$ = \frac{m-\mu(x)}{\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}} - z \frac{\lambda_n(x) \sigma(x_n)}{\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}}$$
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_05.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_06.png" alt="Equation Fail">
+
 Considering that ([@KrigingUpdate]),
-$$\mu_n(x) = \mu(x)+\lambda_n^t(x)(y_n-\mu(x_n))$$
-$$\sigma_n(x)^2 = \sigma(x)^2-\lambda_n^t(x) \Sigma_n \lambda_n(x)$$
 
-Finally, $$ECI_n^m(x,x_n) = \int_{m'}^{+\infty} \left( \sigma_n(x)(a+b z) \Phi(a+b z) +\sigma_n(x) \phi(a+b z) \right) e^{-\frac{z^2}{2}} dz$$
-$$= \sigma_n(x) \left(  \int_{m'}^{+\infty} (a+b z) \Phi(a+b z)  e^{-\frac{z^2}{2}} dz +   \int_{m'}^{+\infty} \phi(a+b z)  e^{-\frac{z^2}{2}} dz \right)$$
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_07.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_08.png" alt="Equation Fail">
+
+
+Finally, 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_09.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_10.png" alt="Equation Fail">
+
 Given,
-$$a := \frac{m-\mu(x)}{\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}}$$
-$$b := -\frac{\lambda_n(x) \sigma(x_n)}{\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}}$$
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_11.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_12.png" alt="Equation Fail">
 
 
 
 
-* $y_n<m$ part: 
-$$ECI_n^y(x,x_n) := \int_{-\infty}^m EI_n^{y}(x | Y_n(x_n)=y_n) d\phi_{\mu,\sigma}{y_n} $$
-$$= \int_{-\infty}^m \left( (y_n-\mu_n(x)) \Phi \left( \frac{y_n-\mu_n(x)}{\sigma_n(x)} \right) + \sigma_n(x) \phi \left( \frac{y_n-\mu_n(x)}{\sigma_n(x)} \right) \right) \frac{e^{-\frac{(y_n-\mu(x_n))^2}{2 \sigma^2(x_n)}}}{\sqrt{2 \pi} \sigma(x_n)} dy_n$$
-Change variable: $z := \frac {y_n-\mu(x_n)}{\sigma(x_n)}$
-  -  $y_n=\sigma(x_n) z + \mu(x_n)$
-  -  $dz = dy_n/\sigma(x_n)$
-  -  $y_n \in [m,+\infty[ \sim z \in [m' = (m-\mu(x_n))/\sigma(x_n), + \infty[$
+
+* 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_46.png" alt="Equation Fail">
+ part: 
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_13.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_14.png" alt="Equation Fail">
+
+Change variable: 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_47.png" alt="Equation Fail">
+
+  -  
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_48.png" alt="Equation Fail">
+
+  -  
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_49.png" alt="Equation Fail">
+
+  -  
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_50.png" alt="Equation Fail">
+
 
 So,
-$$\frac{y_n-\mu_n(x)}{\sigma_n(x)} = \frac{y_n-\mu(x)-\lambda_n^t(x) (y_n-\mu(x_n))} {\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}}$$
-$$ = \frac{-\mu(x)+\lambda_n^t(x) \mu(x_n)}{\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}} + y_n \frac{1-\lambda_n^t(x) }{\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}}$$
 
-Finally, $$ECI_n^y(x,x_n) = \int_{-\infty}^{m'} \left( \sigma_n(x)(a+b z) \Phi(a+b z) +\sigma_n(x) \phi(a+b z) \right) e^{-\frac{z^2}{2}} dz$$
-$$= \sigma_n(x)  \left(  \int_{-\infty}^{m'} (a+b z) \Phi(a+b z)  e^{-\frac{z^2}{2}} dz +   \int_{-\infty}^{m'} \phi(a+b z)  e^{-\frac{z^2}{2}} dz \right)$$
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_15.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_16.png" alt="Equation Fail">
+
+
+Finally, 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_17.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_18.png" alt="Equation Fail">
+
 Given,
-$$a := \frac{(\mu(x_n)-\mu(x))}{\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}}$$
-$$b := -\frac{(1-\lambda_n(x)) \sigma(x_n)}{\sqrt{\sigma^2(x)-\lambda_n^t(x) \Sigma_n \lambda_n(x)}}$$
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_19.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_20.png" alt="Equation Fail">
+
 
 
 
 These integrals need the following expressions to become tractable:
 
-* $\int_{x}^{y} (a+b z) \Phi(a+b z)  e^{-\frac{z^2}{2}} dz$
-* $\int_{x}^{y} \phi(a+b z)  e^{-\frac{z^2}{2}} dz$
+* 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_51.png" alt="Equation Fail">
+
+* 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_52.png" alt="Equation Fail">
+
 
 We have (see below):
 
-$$\int_{x}^{y} \phi(a+b z)  e^{-\frac{z^2}{2}} dz =  -\frac{e^{-\frac{a^2}{2(1+b^2)}}}{\sqrt{1+b^2}} \left( \Phi\left(\frac{(1+b^2)x+ab}{\sqrt{1+b^2}}   \right) - \Phi\left( \frac{(1+b^2)y+ab}{\sqrt{1+b^2}}  \right)  \right)$$
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_21.png" alt="Equation Fail">
+
 
 And
 
-$$\int_{x}^{y} (a+b z) \Phi(a+b z)  e^{-\frac{z^2}{2}} dz$$
-$$=b (\Phi(a+b x) e^{-\frac{x^2}2} -\Phi(a+b y) e^{-\frac{y^2}2}) - b^2 \frac{e^{-\frac{a^2}{2(1+b^2)}}}{\sqrt{1+b^2}} \left( \Phi\left( \frac{(1+b^2)x+ab}{\sqrt{1+b^2}}   \right) - \Phi\left( \frac{(1+b^2)y+ab}{\sqrt{1+b^2}}  \right)  \right)$$
-$$+ a  \left( \Phi_2\left(\begin{pmatrix} y \\ 0 \end{pmatrix}, \mu=\begin{pmatrix} 0\\-a \end{pmatrix}, \Sigma= \begin{pmatrix} 1 && -b \\ -b && 1+b^2 \end{pmatrix} \right) - \Phi_2\left(\begin{pmatrix} x \\ 0 \end{pmatrix}, \mu=\begin{pmatrix} 0\\-a \end{pmatrix}, \Sigma= \begin{pmatrix} 1 && -b \\ -b && 1+b^2 \end{pmatrix} \right) \right)$$
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_22.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_23.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_24.png" alt="Equation Fail">
+
 
 It should be noticed that this exact calculation of ECI is vectorizable, which means that synchronized computations may be performed in an efficient manner.
 
 
-## Detailed calculation of integrals in $ECI^y_n$ and $ECI^m_n$
-
-### $\int_{x}^{y} \phi(a+b z)  e^{-\frac{z^2}{2}} dz$
-
-$$\int_{x}^{y} \phi(a+b z)  e^{-\frac{z^2}{2}} dz$$
-$$= \int_{x}^{y} e^{-\frac{(a+b z)^2}{2}}  e^{-\frac{z^2}{2}} dz = \int_{x}^{y} e^{-\frac{a^2+(1+b^2)z^2+2abz}{2}} dz $$
-$$= -\frac{e^{-\frac{a^2}{2(1+b^2)}}}{\sqrt{1+b^2}} \left( \Phi\left(\frac{(1+b^2)x+ab}{\sqrt{1+b^2}}   \right) - \Phi\left( \frac{(1+b^2)y+ab}{\sqrt{1+b^2}}  \right)  \right)$$
+### Detailed calculation of integrals in 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_53.png" alt="Equation Fail">
+ and 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_54.png" alt="Equation Fail">
 
 
-### $\int_{x}^{y} (a+b z) \Phi(a+b z)  e^{-\frac{z^2}{2}} dz$
+#### 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_55.png" alt="Equation Fail">
 
 
-Changing variable: $t:=a+b z$,
-$$\int_{x}^{y} (a+b z) \Phi(a+b z)  e^{-\frac{z^2}{2}} dz = \int_{a+b x}^{a+b y} t \Phi(t)  e^{-\frac{(t-a)^2}{2b^2}} \frac{dt}b$$
-$$=  -\int_{a+b x}^{a+b y} -\frac{t-a}b \Phi(t)  e^{-\frac{(t-a)^2}{2b^2}} dt + \frac{a}{b} \int_{a+b x}^{a+b y} \Phi(t)  e^{-\frac{(t-a)^2}{2b^2}} dt$$
 
-   * Then, $$-\int_{a+b x}^{a+b y} -\frac{t-a}b \Phi(t)  e^{-\frac{(t-a)^2}{2b^2}} dt  = -b\left[ \Phi(.) e^{-\frac{(.-a)^2}{2b^2}} \right]_{a+b x}^{a+b y} + b\int_{a+b x}^{a+b y} e^{-\frac{t^2}2} e^{-\frac{(t-a)^2}{2b^2}} dt$$
-    $$ = b(\Phi(a+b x) e^{-\frac{x^2}2} -\Phi(a+b y) e^{-\frac{y^2}2}) - b^2\frac{e^{-\frac{a^2}{2(1+b^2)}}}{\sqrt{1+b^2}} \left( \Phi\left( \frac{(1+b^2)x+ab}{\sqrt{1+b^2}}   \right) - \Phi\left( \frac{(1+b^2)y+ab}{\sqrt{1+b^2}}  \right)  \right)$$
-   * And, $$\frac{a}{b} \int_{a+b x}^{a+b y} \Phi(t)  e^{-\frac{(t-a)^2}{2b^2}} dt = a \int_x^y \Phi(a+b z) e^{-z^2/2} dt$$
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_25.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_26.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_27.png" alt="Equation Fail">
+
+
+
+#### 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_56.png" alt="Equation Fail">
+
+
+
+Changing variable: 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_57.png" alt="Equation Fail">
+,
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_28.png" alt="Equation Fail">
+
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_29.png" alt="Equation Fail">
+
+
+   * Then, 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_30.png" alt="Equation Fail">
+
+    
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_31.png" alt="Equation Fail">
+
+   * And, 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_32.png" alt="Equation Fail">
+
   We use the bi-normal cumulative density approximation [@Genz1992]: 
-  $$\int_{-\infty}^y \Phi(a+b z) e^{-z^2/2} dt = \int_{-\infty}^y \int_{-\infty}^{a+b u} e^{-\frac{v^2}2} e^{-\frac{u^2}2} du dv$$
-  Changing variable $t:=v-(a+b u)$, $$= \int_{-\infty}^y \int_{-\infty}^0 e^{-\frac{(t+a+b u)^2}2} e^{-\frac{u^2}2} du dt = \Phi_2\left(\begin{pmatrix} y \\ 0 \end{pmatrix}, \mu=\begin{pmatrix} 0\\-a \end{pmatrix}, \Sigma= \begin{pmatrix} 1 && -b \\ -b && 1+b^2 \end{pmatrix} \right) $$
+  
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_33.png" alt="Equation Fail">
+
+  Changing variable 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_58.png" alt="Equation Fail">
+, 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_34.png" alt="Equation Fail">
+
 and thus, 
-$$\frac{a}{b} \int_{a+b x}^{a+b y} \Phi(t)  e^{-\frac{(t-a)^2}{2b^2}} dt $$ $$= a  \left( \Phi_2\left(\begin{pmatrix} y \\ 0 \end{pmatrix}, \mu=\begin{pmatrix} 0\\-a \end{pmatrix}, \Sigma= \begin{pmatrix} 1 && -b \\ -b && 1+b^2 \end{pmatrix} \right) - \Phi_2\left(\begin{pmatrix} x \\ 0 \end{pmatrix}, \mu=\begin{pmatrix} 0\\-a \end{pmatrix}, \Sigma= \begin{pmatrix} 1 && -b \\ -b && 1+b^2 \end{pmatrix} \right) \right) $$
+
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_35.png" alt="Equation Fail">
+ 
+<img src="https://rawgit.com/IRSN/IECI/master/eq_no_36.png" alt="Equation Fail">
+
 
 
 
